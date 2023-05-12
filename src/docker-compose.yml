@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+  javaes_elasticsearch:
+    environment:
+      -  discovery.type=single-node
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    container_name: "javaes_elasticsearch"
+    ports:
+      - "9200:9200"
+    image: elasticsearch:7.6.2
