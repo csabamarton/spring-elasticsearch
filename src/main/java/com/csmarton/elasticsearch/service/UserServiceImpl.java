@@ -21,7 +21,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User createUser(CreateUserRequest userRequest) {
 
-        log.info("Creating user - Begin");
+        log.debug("Creating user - Begin");
 
         User user = User.builder()
                 .firstName(userRequest.getFirstName())
@@ -30,15 +30,16 @@ public class UserServiceImpl implements UserService {
                 .build();
 
         User result = userRepository.save(user);
+        log.debug("User created with uuid: {}", result.getUuid());
 
-        log.info("Creating user - End");
+        log.debug("Creating user - End");
 
         return result;
     }
 
     @Override
     public List<User> searchUser(String firstName, String lastname) {
-        log.info("Searching User - Begin");
+        log.debug("Searching User - Begin");
 
         List<User> users = null;
 
@@ -46,9 +47,13 @@ public class UserServiceImpl implements UserService {
             users = userRepository.findByFirstNameLikeAndLastNameLike(firstName, lastname);
         } catch (NoSuchIndexException e) {
             users = new ArrayList<>();
+
+            log.debug("There is no index in the Elasticsearch");
         }
 
-        log.info("Searching User - End");
+        log.debug("Result of user search: Found {} record(s)", users.size());
+
+        log.debug("Searching User - End");
 
         return users;
     }
