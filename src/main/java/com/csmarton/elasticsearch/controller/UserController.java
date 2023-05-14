@@ -12,8 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 import javax.validation.Valid;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/elasticsearch")
@@ -38,22 +36,8 @@ public class UserController {
     public ResponseEntity<UserSearchResponse> searchUsers(@RequestBody  @Valid  UserSearchRequest userSearchRequest) {
         log.info("Search User - Controller", userSearchRequest);
 
-        List<User> users = userService.searchUser(userSearchRequest.getFirstName(), userSearchRequest.getLastName());
+        UserSearchResponse userSearchResponse = userService.searchUser(userSearchRequest.getFirstName(), userSearchRequest.getLastName());
 
-        UserSearchResponse userSearchResponse = createUserSearchResponse(users);
         return ResponseEntity.ok().body(userSearchResponse);
-    }
-
-    private UserSearchResponse createUserSearchResponse(List<User> users) {
-       UserSearchResponse userSearchResponse = new UserSearchResponse();
-
-       userSearchResponse.setUsers(
-                    users.stream()
-                            .map(user -> new UserResponse(user.getUuid(), user.getFirstName(), user.getLastName(), user.getEmail() ))
-                            .collect(Collectors.toList()));
-
-       userSearchResponse.setTotal(users.size());
-
-       return userSearchResponse;
     }
 }
