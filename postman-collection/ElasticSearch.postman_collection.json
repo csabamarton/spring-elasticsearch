@@ -1,0 +1,68 @@
+{
+	"info": {
+		"_postman_id": "6f0dcb57-b084-4915-9418-1fd52ef3ce7b",
+		"name": "ElasticSearch",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "870006"
+	},
+	"item": [
+		{
+			"name": "Search for user - Alan Delon",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"firstName\": \"Alan\", \"lastName\": \"Delon\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/elasticsearch/search",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"elasticsearch",
+						"search"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create User - Alan Delon",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"firstName\": \"Al\", \"lastName\": \"fd\", \"email\": \"alma@ga.com\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/elasticsearch/create",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"elasticsearch",
+						"create"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

@@ -3,8 +3,6 @@
 ## Building the project
 
 1. Start Spring Boot Application
-2. start a docker container for the Elasticsearch (there is the docker-compose.yml file under the /src folder)
-3. Use Postman for the POST endpoint:
-- localhost:8080/api/elasticsearch/search
-- localhost:8080/api/elasticsearch/create
-
+2. start a docker container for the Elasticsearch (there is the docker-compose.yml file under the /docker-compose folder)
+3. Import postman collection from the /postman-collection folder:
+4. Use Swagger UI: http://localhost:8080/swagger-ui/index.html
