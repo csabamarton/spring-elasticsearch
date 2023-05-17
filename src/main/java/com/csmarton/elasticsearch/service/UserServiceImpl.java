@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-
+    private final ElasticSearchService elasticSearchService;
     private final UserMapper userMapper;
 
     @Override
@@ -46,7 +46,7 @@ public class UserServiceImpl implements UserService {
         List<User> users = null;
 
         try {
-            users = userRepository.findByFirstNameLikeAndLastNameLike(firstName, lastname);
+            users = elasticSearchService.searchByName(firstName, lastname);
         } catch (NoSuchIndexException e) {
             users = new ArrayList<>();
 

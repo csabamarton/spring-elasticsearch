@@ -1,11 +1,38 @@
-version: '3'
-
+version: '3.7'
 services:
-  javaes_elasticsearch:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.4.0
+    container_name: elasticsearch
+    restart: always
     environment:
-      -  discovery.type=single-node
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-    container_name: "javaes_elasticsearch"
+      - xpack.security.enabled=false
+      - discovery.type=single-node
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
+    cap_add:
+      - IPC_LOCK
+    volumes:
+      - elasticsearch-data-volume:/usr/share/elasticsearch/data
     ports:
-      - "9200:9200"
-    image: elasticsearch:7.6.2
+      - 9200:9200
+      - 9300:9300
+
+  kibana:
+    container_name: kibana
+    image: docker.elastic.co/kibana/kibana:7.4.0
+    restart: always
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    ports:
+      - 5601:5601
+    depends_on:
+      - elasticsearch
+
+volumes:
+  elasticsearch-data-volume:
+    driver: local

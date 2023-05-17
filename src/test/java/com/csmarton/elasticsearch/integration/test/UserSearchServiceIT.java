@@ -1,8 +1,10 @@
 package com.csmarton.elasticsearch.integration.test;
 
 import com.csmarton.elasticsearch.config.Config;
+import com.csmarton.elasticsearch.config.TestConfig;
 import com.csmarton.elasticsearch.model.CreateUserRequest;
 import com.csmarton.elasticsearch.model.User;
+import com.csmarton.elasticsearch.model.UserSearchResponse;
 import com.csmarton.elasticsearch.repository.UserRepository;
 import com.csmarton.elasticsearch.service.UserService;
 import org.junit.jupiter.api.AfterEach;
@@ -14,14 +16,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-@ContextConfiguration(classes = Config.class)
+@ContextConfiguration(classes = {Config.class, TestConfig.class})
 public class UserSearchServiceIT {
 
     @Autowired
@@ -32,7 +33,6 @@ public class UserSearchServiceIT {
             .lastName("Doe")
             .email("john@gmail.com")
             .build();
-
 
     @Autowired
     private UserRepository userRepository;
@@ -58,18 +58,20 @@ public class UserSearchServiceIT {
     @Test
     void testFindByFirstName_Should_Match() {
         User createdUser = userService.createUser(john);
-        List<User> users = userService.searchUser("John", "Doe");
+        UserSearchResponse userResponse = userService.searchUser("John", "Doe");
 
-        assertNotNull(users);
-        assertEquals(users.size(),1);
+        assertNotNull(userResponse);
+        assertNotNull(userResponse.getUsers());
+        assertEquals(userResponse.getUsers().size(),1);
     }
 
     @Test
     void testFindByFirstName_Should_Not_Match() {
-        List<User> users = userService.searchUser("Alan", "Doe");
+        UserSearchResponse userResponse = userService.searchUser("Alan", "Doe");
 
-        assertNotNull(users);
-        assertEquals(users.size(),0);
+        assertNotNull(userResponse);
+        assertNotNull(userResponse.getUsers());
+        assertEquals(userResponse.getUsers().size(),0);
 
     }
 
