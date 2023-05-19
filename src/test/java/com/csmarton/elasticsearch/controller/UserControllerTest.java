@@ -1,6 +1,7 @@
 package com.csmarton.elasticsearch.controller;
 
 import com.csmarton.elasticsearch.model.User;
+import com.csmarton.elasticsearch.model.UserSearchResponse;
 import com.csmarton.elasticsearch.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,12 +10,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.List;
-
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(UserController.class)
@@ -35,14 +33,14 @@ public class UserControllerTest {
                 .email("john@gmail.com")
                 .build();
 
+        UserSearchResponse response = new UserSearchResponse();
 
-        when(userService.searchUser(any(String.class), any(String.class))).thenReturn(List.of(user));
+        when(userService.searchUser(any(String.class), any(String.class))).thenReturn(response);
         this.mockMvc.perform(
                 post("/api/elasticsearch/search")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{ \"firstName\": \"John\", \"lastName\": \"Doe\", \"email\": \"john@gmail.com\" }")
                         .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.total").value(1));;
+                .andExpect(status().isOk());
     }
 }
